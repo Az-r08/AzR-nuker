@@ -77,5 +77,11 @@ async def rolespam(ctx): #role spam command
         print('max number of roles reached')
         break
 
+@client.command()
+async def massunban(ctx): #mass unban
+  bannedUsers = await ctx.message.guild.bans()
+  for user in bannedUsers:
+    await ctx.guild.unban(user.user)
+    print('unbanned '+ user.user.name + '#' + user.user.discriminator)
 
 client.run(os.getenv("TOKEN")) #login 
